@@ -1,0 +1,3 @@
+Leilao (Alura\Leilao\Tests\Model\Leilao)
+ [ ] Leilao nao deve receber lances repetidos
+

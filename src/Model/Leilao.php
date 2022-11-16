@@ -2,6 +2,8 @@
 
 namespace Alura\Leilao\Model;
 
+use phpDocumentor\Reflection\Types\This;
+
 class Leilao
 {
     /** @var Lance[] */
@@ -17,6 +19,10 @@ class Leilao
 
     public function recebeLance(Lance $lance)
     {
+        if (!empty($this->lances) && $this->ehDoUltimoUsuario($lance)) {
+            return;
+        }
+
         $this->lances[] = $lance;
     }
 
@@ -26,5 +32,15 @@ class Leilao
     public function getLances(): array
     {
         return $this->lances;
+    }
+
+    /**
+     * @param Lance $lance
+     * @return bool
+     */
+    private function ehDoUltimoUsuario(Lance $lance): bool
+    {
+        $ultimoLance = $this->getLances()[count($this->lances) - 1];
+        return $lance->getUsuario() === $ultimoLance->getUsuario();
     }
 }
