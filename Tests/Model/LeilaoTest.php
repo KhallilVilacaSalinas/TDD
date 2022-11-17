@@ -23,6 +23,31 @@ class LeilaoTest extends TestCase
         self::assertCount(1, $leilao->getLances());
         self::assertEquals(1000, $leilao->getLances()[0]->getValor());
     }
+
+    public function testLeilaoNaoDeveAceitarMaisDeCincoLancesPorUsuario()
+    {
+        $leilao = new Leilao("Brasília Amarela");
+
+        $joao = new Usuario("Joao");
+        $maria = new Usuario("Maria");
+
+        $leilao->recebeLance(new Lance($joao, 1000));
+        $leilao->recebeLance(new Lance($maria, 2000));
+        $leilao->recebeLance(new Lance($joao, 3000));
+        $leilao->recebeLance(new Lance($maria, 4000));
+        $leilao->recebeLance(new Lance($joao, 5000));
+        $leilao->recebeLance(new Lance($maria, 6000));
+        $leilao->recebeLance(new Lance($joao, 7000));
+        $leilao->recebeLance(new Lance($maria, 7500));
+        $leilao->recebeLance(new Lance($joao, 8000));
+        $leilao->recebeLance(new Lance($maria, 8500));
+
+        $leilao->recebeLance(new Lance($joao, 9000));
+
+        self::assertCount(10, $leilao->getLances());
+        self::assertEquals(8500, $leilao->getLances()[array_key_last($leilao->getLances())]->getValor());
+    }
+    
     /**
      * @dataProvider geraLances
      */
